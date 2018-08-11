@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <title>Sonoace R7 Keygen</title>
+    </head>
+    <body>
+        <table style="border: 1px solid #999;">
+            <thead>
+                <tr>
+                    <th colspan="2" style="background-color: #eee; color: #333; text-align: center;">
+                        Sonoace R7 Keygen
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>
+                        <label for="serialNo">Serial Number</label>:
+                    </td>
+                    <td>
+                        <input type="text" id="serialNo" placeholder="Serial Number" value="BR814EHH600167"/>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <label for="product">Product Code</label>:
+                    </td>
+                    <td>
+                        <select id="product">
+                            <option>AccuvixV10</option>
+                            <option>AccuvixV20</option>
+                            <option>MS102</option>
+                            <option selected="selected">MS104, X7</option>
+                            <option>Other</option>
+                        </select>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <label for="option">Option</label>:
+                    </td>
+                    <td>
+                        <select id="option">
+                            <option>4D</option>
+                            <option>3D XI</option>
+                            <option>CW Function</option>
+                            <option>Cardiac Measurement</option>
+                            <option>DynamicMR</option>
+                            <option>DICOM</option>
+                            <option>DICOM SR</option>
+                            <option>Spatial Compound</option>
+                            <option>STIC XI</option>
+                            <option>VOCAL XI</option>
+                            <option>Evaluation</option>
+                            <option>3DAutoContour</option>
+                            <option>Stressecho</option>
+                            <option>DynamicMR+</option>
+                            <option>AutoIMT</option>
+                            <option>Elastoscan</option>
+                            <option>Panoramic</option>
+                            <option>New3DExpert</option>
+                            <option>New3DPremium</option>
+                            <option>Strain</option>
+                            <option>AutoIMT+</option>
+                        </select>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <label for="licenseKey">License Key</label>:
+                    </td>
+                    <td>
+                        <input type="text" id="licenseKey" onclick="this.select();" readonly/>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="2" style="text-align: center">
+                        <button id="generateBtn">Generate</button>
+                        <button id="decodeBtn" hidden>Decode</button>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        &copy; 2018 <a href="http://hieplpvip.github.io">@hieplpvip</a>
+        <script>
+            const RegCodeSize = 20;
+            var opts = ["OPTION_3D", "OPTION_3DXI", "OPTION_CW", "OPTION_CV_MEAS", "OPTION_DYNAMICMR", "OPTION_DICOM", "OPTION_DICOMSR", "OPTION_SPCOMP", "OPTION_XISTIC", "OPTION_XIVOCAL", "OPTION_EVALUATION", "OPTION_3DAUTOCONTOUR", "OPTION_STRESSECHO", "OPTION_DYNAMICMR2", "OPTION_AUTOIMT", "OPTION_ELASTOSCAN", "OPTION_PANORAMIC", "OPTION_NEW_3D_EXPERT", "OPTION_NEW_3D_PREMIUM", "OPTION_STRAIN", "OPTION_AUTOIMTPLUS"];
+            var sys = [1, 2, 5, 6, 0];
+            function IntToHex(value, digits)
+            {
+                return ('0'.repeat(digits) + value.toString(16).toUpperCase()).slice(-digits);
+            }
+            function generateKey(serialNo, sysCode, optCode) {
+                seed1 = (15000 + sysCode) ^ 0xf41a;
+                seed2 = (16000 + optCode) ^ 0x954e;
+                seed3 = 0x1f41 ^ 0x642c;
+
+                licenseID = serialNo + opts[optCode];
+
+                month = 12; day = 31; year = 4000; // permanent
+                V1 = month ^ 0x0009;
+                V2 = day   ^ 0x00b9;
+                V3 = year  ^ 0x0eb9;
+
+                S2 = IntToHex(V1, 1);     // Encoded month
+
+                STMP = IntToHex(V2, 4);   // Encoded day
+                S10  = STMP.charAt(2);
+                S8   = STMP.charAt(3);
+
+                STMP = IntToHex(V3, 4);   // Encoded year
+                S4   = STMP.charAt(1);
+                S6   = STMP.charAt(2);
+                S12  = STMP.charAt(3);
+
+                //---- Encode Segment 1 (chars #1,3,5) ---------------------------------
+                V3 = licenseID.length - 1;
+                V1 = licenseID.charCodeAt(0) + licenseID.charCodeAt(1) + licenseID.charCodeAt(Math.floor((V3 - 1) / 2)) + licenseID.charCodeAt(V3) + licenseID.charCodeAt(V3 - 1);
+                V2 = (seed1 % V1) & 0xff;
+                STMP = IntToHex(V2, 4);
+                S1   = STMP.charAt(2);
+                S3   = STMP.charAt(3);
+
+                V1 = licenseID.length;
+                if (V1 > 16) S5 = '0'; else S5 = IntToHex(V1, 1);
+
+                //---- Encode Segment 2 (chars #7,9,11) --------------------------------
+                V1 = 0;
+                for (i = 0; i < licenseID.length; i++)
+                    V1 += licenseID.charCodeAt(i);
+                V1 = (V1 << 4 ^ seed2) & 0xfff;
+                STMP = IntToHex(V1, 4);
+                S7   = STMP.charAt(1);
+                S9   = STMP.charAt(2);
+                S11  = STMP.charAt(3);
+
+                //------------- Check segment 3 (chars #13...) ----------------------------
+                V2 = 0;
+                STMP = '';
+                for (i = 0; i < licenseID.length; i++)
+                    V2 += licenseID.charCodeAt(i);
+                V2 = V2 * parseInt(0x7ffffff / V2);
+                j = 31;
+                for (i = 1; i <= 32; i++)
+                {
+                    // Rotates the bits in FSeed3 through shifting,
+                    // but bits that fall off are moved to the other end
+                    V3 = (seed3 << i) | (seed3 >> j) & 0x7fffffff;
+                    V3 = Math.abs(V3);
+                    if (V3 > V2)
+                        V1 = V3 % V2;
+                    else
+                        V1 = V2 % V3;
+                    STMP = STMP + IntToHex(0xfff & V1, 3);
+                    j--;
+                }
+                // Take only the characters needed
+                S13 = STMP.substr(0, RegCodeSize - 12);
+
+                return S1 + S2 + S3 + S4 + S5 + S6 + S7 + S8 + S9 + S10 + S11 + S12 + S13;
+            }
+            document.getElementById("generateBtn").onclick = function(event) {
+                event.preventDefault();
+                serialNo = document.getElementById('serialNo').value.trim();
+                sysCode = sys[document.getElementById('product').selectedIndex];
+                optCode = document.getElementById('option').selectedIndex;
+                if (serialNo == "") alert("Please enter serial number!");
+                else document.getElementById('licenseKey').value = generateKey(serialNo, sysCode, optCode);
+            }
+            document.getElementById("decodeBtn").onclick = function(event) {
+                serialNo = document.getElementById('serialNo').value.trim();
+                for (i = 0; i <= 4; i++)
+                {
+                    for (j = 0; j <= 20; j++)
+                    {
+                        if (document.getElementById('licenseKey').value == generateKey(serialNo, sys[i], j))
+                        {
+                            document.getElementById('product').selectedIndex = i;
+                            document.getElementById('option').selectedIndex = j;
+                            return;
+                        }
+                    }
+                }
+            }
+        </script>
+    </body>
+</html>
