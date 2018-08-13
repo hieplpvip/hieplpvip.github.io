@@ -1,15 +1,17 @@
 <!DOCTYPE html>
 <html>
+    <meta http-equiv="Cache-control" content="public">
+    <meta name="viewport" content="width=device-width">
     <head>
         <meta charset="UTF-8">
-        <title>Sonoace R7 Keygen</title>
+        <title>Medison Keygen</title>
     </head>
     <body>
         <table style="border: 1px solid #999;">
             <thead>
                 <tr>
                     <th colspan="2" style="background-color: #eee; color: #333; text-align: center;">
-                        Sonoace R7 Keygen
+                        Medison Keygen
                     </th>
                 </tr>
             </thead>
@@ -19,7 +21,7 @@
                         <label for="serialNo">Serial Number</label>:
                     </td>
                     <td>
-                        <input type="text" id="serialNo" placeholder="Serial Number" value="BR814EHH600167"/>
+                        <input type="text" id="serialNo" placeholder="Serial Number" size=23 value="BR814EHH600167"/>
                     </td>
                 </tr>
                 <tr>
@@ -27,11 +29,11 @@
                         <label for="product">Product Code</label>:
                     </td>
                     <td>
-                        <select id="product">
+                        <select id="product" onchange="generate();">
                             <option>AccuvixV10</option>
                             <option>AccuvixV20</option>
                             <option>MS102</option>
-                            <option selected="selected">MS104, X7</option>
+                            <option selected>MS104, X7</option>
                             <option>Other</option>
                         </select>
                     </td>
@@ -41,7 +43,7 @@
                         <label for="option">Option</label>:
                     </td>
                     <td>
-                        <select id="option">
+                        <select id="option" onchange="generate();">
                             <option>4D</option>
                             <option>3D XI</option>
                             <option>CW Function</option>
@@ -68,16 +70,30 @@
                 </tr>
                 <tr>
                     <td>
-                        <label for="licenseKey">License Key</label>:
+                        <label for="expiryDate">Expiry Date</label>:
                     </td>
                     <td>
-                        <input type="text" id="licenseKey" onclick="this.select();" readonly/>
+                        <input type="radio" id="permanent" name="expiryDate" value="permanent" onclick="document.getElementById('expiryDate').setAttribute('hidden', ''); generate();" checked> Permanent
+                        <input type="radio" id="custom" name="expiryDate" value="custom" onclick="document.getElementById('expiryDate').removeAttribute('hidden'); generate();"> Custom
                     </td>
                 </tr>
                 <tr>
                     <td colspan="2" style="text-align: center">
-                        <button id="generateBtn">Generate</button>
-                        <button id="decodeBtn" hidden>Decode</button>
+                        <input type="date" id="expiryDate" value="4000-12-31" onchange="generate();" hidden>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <label for="licenseKey">License Key</label>:
+                    </td>
+                    <td>
+                        <input type="text" id="licenseKey" onclick="this.select();" size=23/>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="2" style="text-align: center">
+                        <button id="generateBtn" onclick="generate();">Generate</button>
+                        <button id="decodeBtn" onclick="decode();">Decode</button>
                     </td>
                 </tr>
             </tbody>
@@ -91,14 +107,16 @@
             {
                 return ('0'.repeat(digits) + value.toString(16).toUpperCase()).slice(-digits);
             }
-            function generateKey(serialNo, sysCode, optCode) {
+            function generateKey(serialNo, sysCode, optCode, month, day, year) {
+                var S1, S2, S3, S4, S5, S6, S7, S8, S9, S10, S11, S12, STMP, licenseID;
+                var V1, V2, V3, i, j, seed1, seed2, seed3;
+
                 seed1 = (15000 + sysCode) ^ 0xf41a;
                 seed2 = (16000 + optCode) ^ 0x954e;
                 seed3 = 0x1f41 ^ 0x642c;
 
                 licenseID = serialNo + opts[optCode];
 
-                month = 12; day = 31; year = 4000; // permanent
                 V1 = month ^ 0x0009;
                 V2 = day   ^ 0x00b9;
                 V3 = year  ^ 0x0eb9;
@@ -160,21 +178,37 @@
 
                 return S1 + S2 + S3 + S4 + S5 + S6 + S7 + S8 + S9 + S10 + S11 + S12 + S13;
             }
-            document.getElementById("generateBtn").onclick = function(event) {
-                event.preventDefault();
-                serialNo = document.getElementById('serialNo').value.trim();
-                sysCode = sys[document.getElementById('product').selectedIndex];
-                optCode = document.getElementById('option').selectedIndex;
+            function generate() {
+                var serialNo = document.getElementById('serialNo').value.trim();
+                var sysCode = sys[document.getElementById('product').selectedIndex];
+                var optCode = document.getElementById('option').selectedIndex;
                 if (serialNo == "") alert("Please enter serial number!");
-                else document.getElementById('licenseKey').value = generateKey(serialNo, sysCode, optCode);
-            }
-            document.getElementById("decodeBtn").onclick = function(event) {
-                serialNo = document.getElementById('serialNo').value.trim();
-                for (i = 0; i <= 4; i++)
+                else
                 {
-                    for (j = 0; j <= 20; j++)
+                    if (document.getElementById('permanent').checked)
+                        document.getElementById('licenseKey').value = generateKey(serialNo, sysCode, optCode, 12, 31, 4000);
+                    else
                     {
-                        if (document.getElementById('licenseKey').value == generateKey(serialNo, sys[i], j))
+                        var date = new Date(document.getElementById('expiryDate').value);
+                        document.getElementById('licenseKey').value = generateKey(serialNo, sysCode, optCode, date.getMonth()+1, date.getDate(), date.getFullYear());
+                    }
+                }
+            }
+            function decode() {
+                var serialNo = document.getElementById('serialNo').value.trim();
+                for (var i = 0; i <= 4; i++)
+                {
+                    for (var j = 0; j <= 20; j++)
+                    {
+                        var tmpkey;
+                        if (document.getElementById('permanent').checked)
+                            tmpkey = generateKey(serialNo, sys[i], j, 12, 31, 4000);
+                        else
+                        {
+                            var date = new Date(document.getElementById('expiryDate').value);
+                            tmpkey = generateKey(serialNo, sys[i], j, date.getMonth()+1, date.getDate(), date.getFullYear());
+                        }
+                        if (document.getElementById('licenseKey').value == tmpkey)
                         {
                             document.getElementById('product').selectedIndex = i;
                             document.getElementById('option').selectedIndex = j;
